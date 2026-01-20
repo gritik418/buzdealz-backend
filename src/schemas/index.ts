@@ -1,1 +1,1 @@
-export { usersTable, type User } from "./user.schema";
+export * from "./user.schema.js";
