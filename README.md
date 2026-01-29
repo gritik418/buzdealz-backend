@@ -61,4 +61,8 @@ This is the backend implementation for the Buzdealz "Wishlist with Deal Alerts" 
 
 ## Testing
 You can test the APIs using Postman or cURL.
-Ensure to include the `auth_token` cookie obtained from the `/register` endpoint for protected routes.
+Ensure to include the `auth_token` cookie obtained from the `/login` endpoint for protected routes.
+
+## 🔗 Live Demo
+
+[https://buzdealz-frontend.vercel.app/](https://buzdealz-frontend.vercel.app/)
