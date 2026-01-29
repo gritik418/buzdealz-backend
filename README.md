@@ -45,6 +45,9 @@ This is the backend implementation for the Buzdealz "Wishlist with Deal Alerts" 
 
 ### Auth
 - `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login with email and password
+- `POST /api/auth/logout` - Clear auth cookies
+- `GET /api/auth/me` - Get current user profile (Protected)
 
 ### Deals
 - `GET /api/deals` - List all deals
