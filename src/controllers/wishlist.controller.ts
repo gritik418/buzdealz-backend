@@ -128,7 +128,9 @@ export const addToWishlist = async (req: AuthenticatedRequest, res: Response) =>
       userId,
       dealId,
       alertEnabled: alertEnabled ?? false,
+      savedPrice: deal.price,
     });
+
 
     console.log(`[Analytics] User ${userId} added deal ${dealId} to wishlist.`);
 
