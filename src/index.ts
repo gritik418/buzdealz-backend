@@ -13,14 +13,15 @@ const port = process.env.PORT || 8000;
 
 startPriceTracker();
 
-
 app.use(cookieParser());
-app.use(cors({
-  origin: "http://localhost:3000",
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-}))
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  }),
+);
 
 app.use(express.json());
 
@@ -28,7 +29,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/deals", dealRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/notifications", notificationRoutes);
-
 
 app.listen(port, () => {
   console.log(`App served at port: ${port}`);
