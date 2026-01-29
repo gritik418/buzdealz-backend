@@ -5,7 +5,13 @@ import { db } from "../db/index.js";
 import { usersTable } from "../schemas/index.js";
 import { eq } from "drizzle-orm";
 
-export interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest<
+  P = import("express-serve-static-core").ParamsDictionary,
+  ResBody = any,
+  ReqBody = any,
+  ReqQuery = import("express-serve-static-core").Query,
+  Locals extends Record<string, any> = Record<string, any>
+> extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
   user?: {
     id: number;
     email: string;
