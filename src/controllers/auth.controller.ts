@@ -35,17 +35,32 @@ export const userRegister = async (req: Request, res: Response) => {
       });
     }
 
-    const { name, email, password } = result.data;
+    const { name, username, email, password } = result.data;
 
-    const existingEmail = await db
+    // Check if email exists
+    const [existingEmail] = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email));
 
-    if (existingEmail.length > 0)
+    if (existingEmail)
       return res.status(400).json({
         success: false,
         message: "Email already exists.",
+        errors: { email: "This email is already registered." }
+      });
+
+    // Check if username exists
+    const [existingUsername] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.username, username));
+
+    if (existingUsername)
+      return res.status(400).json({
+        success: false,
+        message: "Username already exists.",
+        errors: { username: "This username is already taken." }
       });
 
     const hashedPassword = await hashValue(password, 10);
@@ -54,11 +69,13 @@ export const userRegister = async (req: Request, res: Response) => {
       .insert(usersTable)
       .values({
         name,
+        username,
         email,
         password: hashedPassword,
         isSubscriber: false,
       })
       .returning();
+
 
     const token = generateAuthToken({
       email: user.email,
@@ -70,12 +87,14 @@ export const userRegister = async (req: Request, res: Response) => {
       message: "Your account has been created!",
     });
   } catch (error) {
+    console.error("Registration Error:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
     });
   }
 };
+
 
 export const userLogin = async (req: Request, res: Response) => {
   try {
@@ -84,7 +103,7 @@ export const userLogin = async (req: Request, res: Response) => {
       return res.status(400).json({
         success: false,
         message: "Validation Error",
-        errors: validation.error.flatten(),
+        errors: validation.error.flatten().fieldErrors,
       });
     }
 
@@ -99,6 +118,7 @@ export const userLogin = async (req: Request, res: Response) => {
       return res.status(401).json({
         success: false,
         message: "Invalid email or password",
+        errors: { email: "No account found with this email." }
       });
     }
 
@@ -107,6 +127,7 @@ export const userLogin = async (req: Request, res: Response) => {
       return res.status(401).json({
         success: false,
         message: "Invalid email or password",
+        errors: { password: "The password you entered is incorrect." }
       });
     }
 
@@ -133,6 +154,7 @@ export const userLogin = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const userLogout = async (req: Request, res: Response) => {
   return res
@@ -170,9 +192,11 @@ export const getMe = async (req: AuthenticatedRequest, res: Response) => {
       data: user,
     });
   } catch (error) {
+    console.error("Registration Error:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
     });
   }
 };
+

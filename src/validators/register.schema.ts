@@ -4,13 +4,19 @@ const RegisterSchema = z
   .object({
     name: z
       .string()
-      .min(1, "First name is required.")
-      .min(3, "First name must be at least 3 characters long.")
-      .max(50, "First name can't exceed 50 characters."),
-    email: z.email("Please enter a valid email address."),
+      .min(1, "Name is required.")
+      .min(3, "Name must be at least 3 characters long.")
+      .max(50, "Name can't exceed 50 characters."),
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters long.")
+      .max(20, "Username can't exceed 20 characters.")
+      .regex(/^[a-zA-Z0-9_\-]+$/, "Username can only contain letters, numbers, underscores, and hyphens."),
+    email: z.string().email("Please enter a valid email address."),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long.")
+
       .max(20, "Password can't exceed 20 characters."),
     passwordConfirmation: z
       .string()
